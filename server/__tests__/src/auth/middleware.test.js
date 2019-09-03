@@ -1,22 +1,15 @@
 'use strict';
 
-process.env.SECRET="test";
+process.env.SECRET = "test";
 
-const {startDB,stopDB} = require('../../supergoose.js');
+const { startDB, stopDB } = require('../../supergoose.js');
 const auth = require('../../../src/auth/middleware.js');
 const Users = require('../../../src/auth/users-model.js');
-const Roles = require('../../../src/auth/roles-model.js');
 
 let users = {
-  admin: {username: 'admin', password: 'password', role: 'admin'},
-  editor: {username: 'editor', password: 'password', role: 'editor'},
-  user: {username: 'user', password: 'password', role: 'user'},
-};
-
-let roles = {
-  admin: {role: 'admin', capabilities:['create','read','update','delete']},
-  editor: {role: 'editor', capabilities:['create','read','update']},
-  user: {role: 'user', capabilities:['read']},
+  admin: { username: 'admin', password: 'password', role: 'admin' },
+  editor: { username: 'editor', password: 'password', role: 'editor' },
+  user: { username: 'user', password: 'password', role: 'user' },
 };
 
 beforeAll(async (done) => {
@@ -24,9 +17,6 @@ beforeAll(async (done) => {
   const admin = await new Users(users.admin).save();
   const editor = await new Users(users.editor).save();
   const user = await new Users(users.user).save();
-  const adminRole = await new Roles(roles.admin).save();
-  const editorRole = await new Roles(roles.editor).save();
-  const userRole = await new Roles(roles.user).save();
   done()
 });
 
@@ -62,9 +52,9 @@ describe('Auth Middleware', () => {
       let middleware = auth();
 
       return middleware(req, res, next)
-      .then(() => {
-        expect(next).toHaveBeenCalledWith(errorMessage);
-      });
+        .then(() => {
+          expect(next).toHaveBeenCalledWith(errorMessage);
+        });
 
     }); // it()
 
@@ -99,11 +89,11 @@ describe('Auth Middleware', () => {
       let next = jest.fn();
       let middleware = auth();
 
-      return middleware(req,res,next)
-      .then( () => {
-        cachedToken = req.token;
-        expect(next).toHaveBeenCalledWith();
-      });
+      return middleware(req, res, next)
+        .then(() => {
+          cachedToken = req.token;
+          expect(next).toHaveBeenCalledWith();
+        });
 
     }); // it()
 
@@ -121,10 +111,10 @@ describe('Auth Middleware', () => {
       let next = jest.fn();
       let middleware = auth();
 
-      return middleware(req,res,next)
-      .then( () => {
-        expect(next).toHaveBeenCalledWith();
-      });
+      return middleware(req, res, next)
+        .then(() => {
+          expect(next).toHaveBeenCalledWith();
+        });
 
     }); // it()
 
@@ -143,10 +133,10 @@ describe('Auth Middleware', () => {
       let next = jest.fn();
       let middleware = auth('godpower');
 
-      return middleware(req,res,next)
-      .then( () => {
-        expect(next).toHaveBeenCalledWith(errorMessage);
-      });
+      return middleware(req, res, next)
+        .then(() => {
+          expect(next).toHaveBeenCalledWith(errorMessage);
+        });
 
     }); // it()
 
@@ -161,10 +151,10 @@ describe('Auth Middleware', () => {
       let next = jest.fn();
       let middleware = auth('delete');
 
-      return middleware(req,res,next)
-      .then( () => {
-        expect(next).toHaveBeenCalledWith();
-      });
+      return middleware(req, res, next)
+        .then(() => {
+          expect(next).toHaveBeenCalledWith();
+        });
 
     }); // it()
 
