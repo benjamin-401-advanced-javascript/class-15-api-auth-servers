@@ -9,8 +9,7 @@ const morgan = require('morgan');
 const errorHandler = require('./middleware/500.js');
 const notFound = require('./middleware/404.js');
 const authRouter = require('./auth/router.js');
-const categoriesRouter = require('./routes/categories.js')
-const productsRouter = require('./routes/products.js')
+const apiRouter = require('./routes/modelRoutes.js')
 
 // Prepare the express app
 const app = express();
@@ -24,8 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use(authRouter);
-app.use(categoriesRouter);
-app.use(productsRouter);
+app.use(apiRouter);
 
 // Catchalls
 app.use(notFound);

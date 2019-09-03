@@ -1,23 +1,24 @@
 'use strict';
 
 const express = require('express');
-const categoryRouter = express.Router();
+const modelRouter = express.Router();
 
 const auth = require('../auth/middleware.js');
 
-const Categories = require('../models/categories/categories.js');
-const categories = new Categories();
+const modelLoader = require('../middleware/modelLoader.js')
 
-categoryRouter.get('/categories', getCategories);
-categoryRouter.get('/categories/:id', getCategory);
-categoryRouter.post('/categories', auth(), addCategory);
-categoryRouter.put('/categories/:id', auth(), replaceCategory);
-categoryRouter.patch('/categories/:id', auth(), updateCategory);
-categoryRouter.delete('/categories/:id', auth(), deleteCategory);
+// middleware
+modelRouter.param('model', modelLoader);
+//routes
+modelRouter.get('/:model', getAll);
+modelRouter.get('/:model/:id', get);
+modelRouter.post('/:model', auth(), addModel);
+modelRouter.put('/:model/:id', auth(), replaceModel);
+modelRouter.patch('/:model/:id', auth(), updateModel);
+modelRouter.delete('/:model/:id', auth(), deleteModel);
 
-function getCategories(req, res, next) {
-
-  categories.get()
+function getAll(req, res, next) {
+  req.model.get()
     .then(data => {
       res.status(200).json(data);
     })
@@ -25,17 +26,17 @@ function getCategories(req, res, next) {
 
 }
 
-function getCategory(req, res, next) {
-  categories.get(req.params.id)
+function get(req, res, next) {
+  req.model.get(req.params.id)
     .then(data => {
       res.status(200).json(data);
     })
     .catch(next);
 }
 
-function addCategory(req, res, next) {
+function addModel(req, res, next) {
   if (req.user.can('create')) {
-    categories.create(req.body)
+    req.model.create(req.body)
       .then(data => {
         res.status(200).json(data);
       })
@@ -45,9 +46,9 @@ function addCategory(req, res, next) {
   }
 }
 
-function replaceCategory(req, res, next) {
+function replaceModel(req, res, next) {
   if (req.user.can('update')) {
-    categories.update(req.params.id, req.body)
+    req.model.update(req.params.id, req.body)
       .then(data => {
         res.status(200).json(data);
       })
@@ -57,9 +58,9 @@ function replaceCategory(req, res, next) {
   }
 }
 
-function updateCategory(req, res, next) {
+function updateModel(req, res, next) {
   if (req.user.can('update')) {
-    categories.update(req.params.id, req.body)
+    req.model.update(req.params.id, req.body)
       .then(data => {
         res.status(200).json(data);
       })
@@ -69,9 +70,9 @@ function updateCategory(req, res, next) {
   }
 }
 
-function deleteCategory(req, res, next) {
+function deleteModel(req, res, next) {
   if (req.user.can('delete')) {
-    categories.delete(req.params.id)
+    req.model.delete(req.params.id)
       .then(data => {
         res.status(200).json(data);
       })
@@ -81,4 +82,4 @@ function deleteCategory(req, res, next) {
   }
 }
 
-module.exports = categoryRouter;
+module.exports = modelRouter;

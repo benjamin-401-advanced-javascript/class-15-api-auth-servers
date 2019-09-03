@@ -11,22 +11,13 @@ const supergoose = require('../../supergoose.js');
 const mockRequest = supergoose.server(server);
 
 let users = {
-  admin: {username: 'admin', password: 'password', role: 'admin'},
-  editor: {username: 'editor', password: 'password', role: 'editor'},
-  user: {username: 'user', password: 'password', role: 'user'},
-};
-
-let roles = {
-  admin: {role: 'admin', capabilities:['create','read','update','delete']},
-  editor: {role: 'editor', capabilities:['create','read','update']},
-  user: {role: 'user', capabilities:['read']},
+  admin: { username: 'admin', password: 'password', role: 'admin' },
+  editor: { username: 'editor', password: 'password', role: 'editor' },
+  user: { username: 'user', password: 'password', role: 'user' },
 };
 
 beforeAll(async (done) => {
   await supergoose.startDB();
-  const admin = await new Roles(roles.admin).save();
-  const editor = await new Roles(roles.editor).save();
-  const user = await new Roles(roles.user).save();
   done()
 });
 
@@ -34,15 +25,15 @@ beforeAll(async (done) => {
 afterAll(supergoose.stopDB);
 
 describe('Auth Router', () => {
-  
-  Object.keys(users).forEach( userType => {
-    
+
+  Object.keys(users).forEach(userType => {
+
     describe(`${userType} users`, () => {
-      
+
       let encodedToken;
       let id;
-      
-      it('can create one', () => {
+
+      it('can create a user', () => {
         return mockRequest.post('/signup')
           .send(users[userType])
           .then(results => {
@@ -75,7 +66,7 @@ describe('Auth Router', () => {
       });
 
     });
-    
+
   });
-  
+
 });

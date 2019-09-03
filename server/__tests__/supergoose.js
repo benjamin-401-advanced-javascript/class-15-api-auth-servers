@@ -18,26 +18,26 @@ let supergoose = module.exports = {};
 supergoose.server = (server) => supertest(server);
 
 /**
- * Typically used in Jest beforeAll hook
+ *  used in Jest beforeAll hook
  */
 supergoose.startDB = async () => {
-  
+
   mongoServer = new MongoMemoryServer();
-  
+
   const mongoUri = await mongoServer.getConnectionString();
-  
+
   const mongooseOptions = {
-    useNewUrlParser:true,
+    useNewUrlParser: true,
     useCreateIndex: true
   };
-  
+
   await mongoose.connect(mongoUri, mongooseOptions, (err) => {
     if (err) console.error(err);
   });
 };
 
 /**
- * Typically used in Jest afterAll hook
+ *  used in Jest afterAll hook
  */
 supergoose.stopDB = () => {
   mongoose.disconnect();
