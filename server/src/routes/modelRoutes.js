@@ -10,12 +10,12 @@ const modelLoader = require('../middleware/modelLoader.js')
 // middleware
 modelRouter.param('model', modelLoader);
 //routes
-modelRouter.get('/:model', getAll);
-modelRouter.get('/:model/:id', get);
-modelRouter.post('/:model', auth(), addModel);
-modelRouter.put('/:model/:id', auth(), replaceModel);
-modelRouter.patch('/:model/:id', auth(), updateModel);
-modelRouter.delete('/:model/:id', auth(), deleteModel);
+modelRouter.get('content/:model', getAll);
+modelRouter.get('content/:model/:id', get);
+modelRouter.post('content/:model', auth(), addModel);
+modelRouter.put('content/:model/:id', auth(), replaceModel);
+modelRouter.patch('content/:model/:id', auth(), updateModel);
+modelRouter.delete('content/:model/:id', auth(), deleteModel);
 
 function getAll(req, res, next) {
   req.model.get()
